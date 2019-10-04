@@ -1,20 +1,50 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<div class="container">
+  <div class="card-block" *ngFor="let card of cards" (click)="openPanel(card)" [ngClass]="card.hypothesis ?'showCard':'hideCard'">
+    <span class="card__date">{{card.date}}</span>
+      <div *ngIf='card.hypothesis; else show'>
+      <div class="card__content">
+            {{card.hypothesis}}
+      </div>
+    </div>
+    <ng-template #show>
+      <div class="card__content">
+        <div class="round"><span class="centered">+</span></div>
+        <span class="card__text">Добавить гипотезу</span>
+      </div>
+    </ng-template>
+  </div>
+  <div class="right-panel" [@slideInOut]="animationState">
+    <div [formGroup]="form">
+      <h5>Добавьте свою гипотезу</h5>
+      <p>
+        Если не уверены как правильно ставить гипотезы, 
+        посмотрите короткий ролик с обучением: <a>somalink.ru</a>
+      </p>
+      <div class="form-group">
+          <label for="hypothesis">Мои гипотезы</label>
+          <input type="text" class="form-control" id="hypothesis" formControlName="hypothesis">
+      </div>
+      <div class="form-group row">
+        <label for="deadline" class="col-sm-3 col-form-label">DDL</label>
+        <div class="col-sm-9">
+          <input type="date" class="form-control" id="deadline" formControlName="deadline">
+        </div>
+      </div>
+  
+      <div class="form-row mb-3 p-2" formGroupName="actions">
+          <label><strong>Добавьте действие для гипотизы</strong></label>
+          <div class="m-2 actions" *ngFor="let control of form.get('actions').controls; let i = index; trackBy:trackByFn">
+              <div [formGroupName]="i" class="col">
+                <input type="checkbox" class="form-check-input" formControlName="checkbox">
+                <textarea  class="form-control" data-count="" (input)="changeValue($event)" formControlName="action"></textarea>
+              </div>
+          </div>
+      </div>
+      
+      <button class="btn btn-info" type="button" (click)="save(id, date)">Создать гипотезу</button>
+    </div>
+
+
+  </div>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 
