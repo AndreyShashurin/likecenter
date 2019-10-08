@@ -131,18 +131,22 @@ export class AppComponent implements OnInit {
   createForm() {
     this.form = new FormGroup({
       id: new FormControl(),
-      hypothesis: new FormControl(),
-      deadline: new FormControl(), 
+      hypothesis: new FormControl(''),
+      deadline: new FormControl(''), 
       actions: this.fb.array([])
     });
     this.addFormArray();
   }
 
   openPanel(data: any) {
-    this.createForm()
     this.animationState = this.animationState === 'out' ? 'in' : 'out';
     this.id = data.id;
     this.date = data.date;
+    this.createForm();
+    if(data.actions.length) {
+        this.form.patchValue(data);
+        this.form.controls['actions'] = this.fb.array(data.actions.map(i => this.fb.group(i)));
+    }
   }
 
   changeValue(data: any){
@@ -179,7 +183,6 @@ export class AppComponent implements OnInit {
 
     this.form.reset();
     this.form.value.actions.splice(0, (<FormArray>this.form.get('actions')).length);
-    console.log(this.form.value)
     this.animationState =  'out';
   }
 }
