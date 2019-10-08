@@ -1,6 +1,6 @@
 <div class="container">
   <div class="card-block" *ngFor="let card of cards" (click)="openPanel(card)" [ngClass]="card.hypothesis ?'showCard':'hideCard'">
-    <span class="card__date">{{card.date}}</span>
+    <span class="card__date">{{card.date | date:'dd LLLL'}}</span>
       <div *ngIf='card.hypothesis; else show'>
       <div class="card__content">
             {{card.hypothesis}}
@@ -27,7 +27,7 @@
       <div class="form-group row">
         <label for="deadline" class="col-sm-3 col-form-label">DDL</label>
         <div class="col-sm-9">
-          <input type="date" class="form-control" id="deadline" formControlName="deadline" >
+          <input type="text" class="form-control" id="deadline" value="{{dataFormat}}" readonly >
         </div>
       </div>
   
@@ -40,11 +40,8 @@
               </div>
           </div>
       </div>
-      
-      <button class="btn btn-info" type="button" (click)="save(id, date)">Создать гипотезу</button>
+      <button class="btn btn-info" type="button" (click)="save(id, data)">Создать гипотезу</button>
     </div>
-
-
   </div>
 </div>
 

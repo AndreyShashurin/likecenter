@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger, state, group,  transition, animate, style } from '@angular/animations';
+import { trigger, state, transition, animate, style } from '@angular/animations';
 import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { DatePipe } from '@angular/common';
 
 export interface Cards {
   id: number, 
   hypothesis: string, 
-  date: any,
-  deadline: any,
+  date: number,
   actions: any[]
 }
 
@@ -31,98 +30,92 @@ export interface Cards {
 export class AppComponent implements OnInit {
   title = 'likecenter';
   id: number;
-  date: any;
+  data: any;
+  date: Date;
+  dataFormat: string;
   change: number;
   animationState: string = 'out';
-  cards: Cards[] = [
+  cards: Cards[];
+  form: FormGroup;
+
+  constructor(private fb: FormBuilder, private datePipe: DatePipe){
+    this.date = new Date();
+    this.cards = [
     {
       id: 1,
       hypothesis: '',
-      date: '1 июня',
-      deadline: '',
+      date: this.date.setDate( this.date.getDate()),
       actions: []
     },
     {
       id: 2,
       hypothesis: '',
-      date: '2 июня',
-      deadline: '',
+      date: this.date.setDate( this.date.getDate() + 1 ),
       actions: []
     },
     {
       id: 3,
       hypothesis: '',
-      date: '3 июня',
-      deadline: '',
+      date: this.date.setDate( this.date.getDate() + 1),
       actions: []
     },
     {
       id:4,
       hypothesis: '',
-      date: '4 июня',
-      deadline: '',
+      date: this.date.setDate( this.date.getDate() + 1),
       actions: []
     },
     {
       id: 5,
       hypothesis: '',
-      date: '5 июня',
-      deadline: '',
+      date: this.date.setDate( this.date.getDate() + 1),
       actions: []
     },
     {
       id: 6,
       hypothesis: '',
-      date: '6 июня',
-      deadline: '',
+      date: this.date.setDate( this.date.getDate() + 1),
       actions: []
     },
     {
       id: 7,
       hypothesis: '',
-      date: '7 июня',
-      deadline: '',
+      date: this.date.setDate( this.date.getDate() + 1),
       actions: []
     },
     {
       id: 8,
       hypothesis: '',
-      date: '8 июня',
-      deadline: '',
+      date:this.date.setDate( this.date.getDate() + 1),
       actions: []
     },
     {
       id: 9,
       hypothesis: '',
-      date: '9 июня',
-      deadline: '',
+      date:this.date.setDate( this.date.getDate() + 1),
       actions: []
     },
     {
       id: 10,
       hypothesis: '',
-      date: '10 июня',
-      deadline: '',
+      date: this.date.setDate( this.date.getDate() + 1),
       actions: []
     },
     {
       id: 11,
       hypothesis: '',
-      date: '11 июня',
-      deadline: '',
+      date: this.date.setDate( this.date.getDate() + 1),
       actions: []
     },
     {
       id: 12,
       hypothesis: '',
-      date: '12 июня',
-      deadline: '',
+      date: this.date.setDate( this.date.getDate() + 1),
       actions: []
     }
   ];
-  form: FormGroup;
 
-  constructor(private fb: FormBuilder){}
+  }
 
   ngOnInit() {
     this.createForm()
@@ -132,7 +125,6 @@ export class AppComponent implements OnInit {
     this.form = new FormGroup({
       id: new FormControl(),
       hypothesis: new FormControl(''),
-      deadline: new FormControl(''), 
       actions: this.fb.array([])
     });
     this.addFormArray();
@@ -141,7 +133,8 @@ export class AppComponent implements OnInit {
   openPanel(data: any) {
     this.animationState = this.animationState === 'out' ? 'in' : 'out';
     this.id = data.id;
-    this.date = data.date;
+    this.data = data.date;
+    this.dataFormat = this.datePipe.transform(data.date,"dd.MM.yyyy");
     this.createForm();
     if(data.actions.length) {
         this.form.patchValue(data);
@@ -172,15 +165,14 @@ export class AppComponent implements OnInit {
   }
 
 
-  save(id:number, date:any){
+  save(id:number, date: any){
     this.form.value.id = id;
     this.form.value.date = date;
     for (let card in this.cards) {
       if (this.cards[card].id == id) {
-        this.cards[card] = this.form.value
+          this.cards[card] = this.form.value
       }
     }
-
     this.form.reset();
     this.form.value.actions.splice(0, (<FormArray>this.form.get('actions')).length);
     this.animationState =  'out';
